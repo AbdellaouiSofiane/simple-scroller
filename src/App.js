@@ -1,55 +1,36 @@
 import { useState } from "react";
+import ToggleButton from "./componenets/ToggleButton";
+import StepButtons from "./componenets/StepButtons";
+import NavigateButtons from "./componenets/NavigateButtons";
+import StepText from "./componenets/StepText";
 
 const messages = [
   "Learn React ⚛️",
   "Apply for jobs 💼",
   "Invest your new income 🤑",
+  "Be happy 😀",
 ];
 
-function App() {
+export default function App() {
   const [step, setStep] = useState(1);
   const [isOpen, setIsOpen] = useState(true);
-
-  function handlePrevious() {
-    setStep((s) => Math.max(s - 1, 1));
-  }
-  function handleNext() {
-    setStep((s) => Math.min(s + 1, 3));
-  }
+  const nbSteps = messages.length;
 
   return (
     <>
-      <button className="close" onClick={() => setIsOpen((isOpen) => !isOpen)}>
-        &times;
-      </button>
+      <ToggleButton isOpen={isOpen} onToggle={setIsOpen} />
       {isOpen && (
         <div className="steps">
-          <div className="numbers">
-            <div className={step >= 1 ? "active" : ""}>1</div>
-            <div className={step >= 2 ? "active" : ""}>2</div>
-            <div className={step >= 3 ? "active" : ""}>3</div>
-          </div>
-          <p className="message">
-            Step {step}: {messages[step - 1]}
-          </p>
-          <div className="buttons">
-            <button
-              style={{ backgroundColor: "#7950f2", color: "#fff" }}
-              onClick={handlePrevious}
-            >
-              Previous
-            </button>
-            <button
-              style={{ backgroundColor: "#7950f2", color: "#fff" }}
-              onClick={handleNext}
-            >
-              Next
-            </button>
-          </div>
+          <StepButtons step={step} nbSteps={nbSteps} />
+          <StepText step={step} message={messages[step - 1]} />
+          <NavigateButtons
+            step={step}
+            nbSteps={nbSteps}
+            onPreviousClick={() => setStep((s) => Math.max(s - 1, 1))}
+            onNextClick={() => setStep((s) => Math.min(s + 1, nbSteps))}
+          />
         </div>
       )}
     </>
   );
 }
-
-export default App;
